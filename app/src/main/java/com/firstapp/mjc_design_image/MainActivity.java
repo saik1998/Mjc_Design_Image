@@ -19,7 +19,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     Context context;
     List<ModelClass> modelClassList = new ArrayList<>();
-
     ModelClass modelClass;
     AdapterClass adapterClass;
     RecyclerView recyclerView;

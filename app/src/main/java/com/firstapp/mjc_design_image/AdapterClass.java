@@ -31,7 +31,6 @@ public class AdapterClass extends RecyclerView.Adapter<AdapterClass.ViewHolder> 
 
         } else if (viewType == 1) {
             View root = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_recycler_low, parent, false);
-
             return new ViewHolder(root);
 
         } else {
