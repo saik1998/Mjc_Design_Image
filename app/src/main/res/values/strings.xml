@@ -25,5 +25,21 @@
     <string name="medium">Medium Priority</string>
     <string name="rece">Received(9)</string>
 
+    <string-array name="filter1">
+        <item>filter1</item>
+        <item>filter2</item>
+        <item>filter3</item>
+        <item>filter4</item>
+
+    </string-array>
+
+    <string-array name="filter2">
+        <item>filter2</item>
+        <item>filter3</item>
+        <item>filter4</item>
+        <item>filter5</item>
+
+    </string-array>
+
 
 </resources>

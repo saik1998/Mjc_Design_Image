@@ -41,7 +41,7 @@
                 style="@style/ImageView"
                 android:layout_toStartOf="@+id/colud2"
                 android:background="@drawable/background_design"
-                android:src="@drawable/cloud_4" />
+                android:src="@drawable/cloud_3" />
 
 
         </RelativeLayout>
@@ -83,6 +83,7 @@
                 android:layout_margin="10dp"
                 android:background="@drawable/background_design">
                 <ImageView
+                    android:id="@+id/Qr_CodeScanner"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:src="@drawable/sca_nner"/>
@@ -127,6 +128,7 @@
                 android:weightSum="1">
 
                 <RelativeLayout
+                    android:id="@+id/RelativeFilter1"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_weight="0.5"
@@ -161,6 +163,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/RelativeFilter2"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_weight="0.5"
@@ -189,6 +192,7 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="10dp"
                         android:src="@drawable/drop_down" />
+
 
                 </RelativeLayout>
 
@@ -238,8 +242,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/RecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/custom_recyclerview"/>
+            android:layout_height="match_parent" />
 
 
 

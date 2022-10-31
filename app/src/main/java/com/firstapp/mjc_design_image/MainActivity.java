@@ -1,17 +1,30 @@
 package com.firstapp.mjc_design_image;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +36,15 @@ public class MainActivity extends AppCompatActivity {
     AdapterClass adapterClass;
     RecyclerView recyclerView;
     AppCompatButton apply;
+    AlertDialog alertDialog;
+    ImageView qrcodeScanner;
+    Spinner spinner1,spinner2;
+
+    private static final int CAMERA_PERMISSION_CODE = 101;
+
+
+
+    FloatingActionButton floatingActionButton;
 
     ImageView downarrow1, downarrow2;
     TextView textView1;
@@ -34,40 +56,91 @@ public class MainActivity extends AppCompatActivity {
 
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.statusbar));
 
-//        apply=findViewById(R.id.Apply);
-//        apply.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(context, "appiled", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+//        spinner1=findViewById(R.id.Spinner1);
+//        ArrayAdapter<String> myAdapter1=new ArrayAdapter<String>(MainActivity.this,
+//                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+//                getResources().getStringArray(R.array.filter1));
+//
+//        myAdapter1.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
+//        spinner1.setAdapter(myAdapter1);
 
-        downarrow1 = findViewById(R.id.down_arrow1);
-        downarrow1.setOnClickListener(new View.OnClickListener() {
+//        spinner2=findViewById(R.id.Spinner2);
+//        ArrayAdapter<String> myAdapter2=new ArrayAdapter<String>(MainActivity.this,
+//                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+//                getResources().getStringArray(R.array.filter2));
+//
+//        myAdapter2.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
+//        spinner2.setAdapter(myAdapter2);
+
+
+
+
+        qrcodeScanner=findViewById(R.id.Qr_CodeScanner);
+        qrcodeScanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= 23) {
+                    if (checkPermission(Manifest.permission.CAMERA)) {
+                        openScanner();
 
-                ArrayList<String> list = new ArrayList<>();
-                list.add("filter1");
-                list.add("filter2");
-                list.add("filter3");
-                list.add("filter4");
+                    } else {
+                        requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+                    }
+                } else
+                {
+                    openScanner();
+                }
+
+
+            }
+        });
+
+        floatingActionButton=findViewById(R.id.fab);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
+                View root=getLayoutInflater().inflate(R.layout.floating_action,null);
+
+                builder.setView(root);
+                builder.setCancelable(true);
+
+                alertDialog = builder.create();
+                alertDialog.show();
+
+
+
+        }
+        });
+
+
+
+//        downarrow1 = findViewById(R.id.down_arrow1);
+//        downarrow1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                ArrayList<String> list = new ArrayList<>();
+//                list.add("filter1");
+//                list.add("filter2");
+//                list.add("filter3");
+//                list.add("filter4");
 //
 //                ArrayAdapter adapter = new ArrayAdapter(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,list);
 //        downarrow1.setAdapter(adapter);
 //        downarrow2.setAdapter(adapter);
-
-            }
-        });
-
-        downarrow2 = findViewById(R.id.down_arrow2);
-        downarrow2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        textView1 = findViewById(R.id.filter1);
+//
+//            }
+//        });
+//
+//        downarrow2 = findViewById(R.id.down_arrow2);
+//        downarrow2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
+//        textView1 = findViewById(R.id.filter1);
 
 
         recyclerView = findViewById(R.id.RecyclerView);
@@ -86,6 +159,39 @@ public class MainActivity extends AppCompatActivity {
         loadData();
 
 
+    }
+
+    private void openScanner() {
+        new IntentIntegrator(MainActivity.this).initiateScan();
+
+    }
+    private boolean checkPermission(String camera) {
+        int result = ContextCompat.checkSelfPermission(MainActivity.this, camera);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            return true;
+
+        } else {
+            return false;
+        }
+    }
+
+    private void requestPermission(String permision, int code) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, permision)) {
+
+        } else {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{permision}, code);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case CAMERA_PERMISSION_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openScanner();
+                }
+        }
     }
 
     private void loadData() {
